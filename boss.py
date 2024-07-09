@@ -60,12 +60,4 @@ subprocess.run(win_exec_smb, shell=True)
 powershell_command = r'Copy-Item -Path "\\10.69.4.5\ShareBook\*" -Destination "C:\Users\fedorov\Desktop" -Recurse'
 
 # Запуск команды через subprocess
-result = subprocess.run(["powershell.exe", "-Command", powershell_command], capture_output=True, text=True)
-
-# Обработка результатов выполнения команды
-if result.returncode == 0:
-    print("PowerShell command executed successfully.")
-    print(result.stdout)
-else:
-    print("Error executing PowerShell command:")
-    print(result.stderr)
+subprocess.run(["powershell.exe", "-Command", powershell_command], capture_output=True, text=True)
